@@ -31,7 +31,12 @@ namespace Core.Utilities.Helpers
             return result;
         }
 
-        public static string AddAsync(IFormFile file)
+        public static string AddAsync(string a)
+        {
+            return a;
+        }
+
+            public static string AddAsync(IFormFile file)
         {
             var result = newPath(file);
 

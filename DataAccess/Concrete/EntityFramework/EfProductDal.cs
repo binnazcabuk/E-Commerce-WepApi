@@ -21,10 +21,11 @@ namespace DataAccess.Concrete.EntityFramework
                 var result = from p in context.Products
                              join c in context.Categories
                              on p.CategoryId equals c.CategoryId
+                             join s in context.Suppliers on p.SupplierId equals s.SupplierId
                              select new ProductDetailDto
                              {
                                  ProductId = p.ProductId, ProductName = p.ProductName,
-                                 CategoryName = c.CategoryName, UnitsInStock = p.UnitsInStock 
+                                 CategoryName = c.CategoryName, UnitPrice = (short)p.UnitPrice,SupplierName=s.SupplierName
                              };
                 return result.ToList();
             }

@@ -8,8 +8,9 @@ using System.Text;
 
 namespace DataAccess.Abstract
 {
-   public interface IOrderDal: IEntityRepository<Order>
+    public interface IBasketDal : IEntityRepository<Basket>
     {
-        List<OrderDetailDto> GetOrderDetails(Expression<Func<OrderDetailDto, bool>> filter = null);
+        List<BasketDetailDto> GetBasketDetails(Expression<Func<BasketDetailDto, bool>> filter = null);
+       
     }
 }

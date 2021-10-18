@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
@@ -29,10 +30,10 @@ namespace Business.Concrete
                 LastName = userForRegisterDto.LastName,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                Status = true
+              
             };
             _userService.Add(user);
-            return new SuccessDataResult<User>(user, "kayıt oldu");
+            return new SuccessDataResult<User>(user, Messages.UserAdded);
         }
 
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
@@ -40,22 +41,22 @@ namespace Business.Concrete
             var userToCheck = _userService.GetByMail(userForLoginDto.Email);
             if (userToCheck == null)
             {
-                return new ErrorDataResult<User>("kullanıcı bulunamadı");
+                return new ErrorDataResult<User>(Messages.UserNotFound);
             }
 
-            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
+            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.Data.PasswordHash, userToCheck.Data.PasswordSalt))
             {
-                return new ErrorDataResult<User>("parola hatalı");
+                return new ErrorDataResult<User>(Messages.PasswordError);
             }
 
-            return new SuccessDataResult<User>(userToCheck, "basarılı giriş");
+            return new SuccessDataResult<User>(userToCheck.Data, Messages.SuccessfulLogin);
         }
 
         public IResult UserExists(string email)
         {
             if (_userService.GetByMail(email) != null)
             {
-                return new ErrorResult("kullanıcı mevcut");
+                return new ErrorResult(Messages.UserAlreadyExists);
             }
             return new SuccessResult();
         }
@@ -63,8 +64,37 @@ namespace Business.Concrete
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
             var claims = _userService.GetClaims(user);
-            var accessToken = _tokenHelper.CreateToken(user, claims);
-            return new SuccessDataResult<AccessToken>(accessToken, "Token oluşturuldu");
+            var accessToken = _tokenHelper.CreateToken(user, claims.Data);
+            return new SuccessDataResult<AccessToken>(accessToken,Messages.AccessTokenCreated);
+        }
+
+        public IDataResult<User> Update(UserForUpdateDto userForUpdate, string password)
+        {
+            byte[] passwordHash, passwordSalt;
+            HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            var user = new User
+            {
+                UserId = userForUpdate.Id,
+                Email = userForUpdate.Email,
+                FirstName = userForUpdate.FirstName,
+                LastName = userForUpdate.LastName,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+           
+
+            };
+            _userService.Update(user);
+            return new SuccessDataResult<User>(user, Messages.Registered);
+        }
+
+        public IResult ExistsId(int Id)
+        {
+            var user = _userService.GetById(Id);
+            if (user != null)
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult(Messages.UserAlreadyExists);
         }
     }
 }

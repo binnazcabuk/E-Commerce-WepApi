@@ -3,11 +3,11 @@ using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Caching;
-using Core.Aspects.Autofac.Logging;
+
 using Core.Aspects.Autofac.Performance;
 using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
-using Core.CrossCuttingConcerns.Logging.Log4Net;
+
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
@@ -49,14 +49,17 @@ namespace Business.Concrete
                 return result; //
             }
 
+       
+          
             _productDal.Add(product);
             return new SuccessResult(Messages.ProductAdded);
 
 
 
         }
+        
 
-       
+
         public IDataResult<List<Product>> GetAll()
         {
            
@@ -71,14 +74,14 @@ namespace Business.Concrete
 
         }
 
-        public IDataResult<List<Product>> GetAllByCategoryId(int id)
+        public IDataResult<List<Product>> GetAllByCategoryId(int categoryId)
         {
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == id));
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == categoryId));
         }
        
         [PerformanceAspect(10)] //sadece bu metodta çalışır
         [CacheAspect]
-        [LogAspect(typeof(FileLogger))]
+       // [LogAspect(typeof(FileLogger))]
         public IDataResult<Product> GetById(int productId)
         {
             return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));

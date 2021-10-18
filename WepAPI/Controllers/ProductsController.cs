@@ -16,10 +16,11 @@ namespace WepAPI.Controllers
     public class ProductsController : ControllerBase
     {
         IProductService _productService;
-
+       
         public ProductsController(IProductService productService)
         {
             _productService = productService;
+            
         }
 
         [HttpGet("getall")]
@@ -33,10 +34,23 @@ namespace WepAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getbyid")]
-        public IActionResult GetById(int id)
+        [HttpGet("getalldetail")]
+        public IActionResult GetAllDetail()
         {
-            var result = _productService.GetById(id);
+            var result = _productService.GetProductDetails();
+            if (result.Success == true)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+
+
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int productId)
+        {
+            var result = _productService.GetById(productId);
             if (result.Success)
             {
                 return Ok(result);

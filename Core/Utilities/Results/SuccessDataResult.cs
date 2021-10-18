@@ -22,7 +22,7 @@ namespace Core.Utilities.Results
                 
         }
         //default değer,doğruluk
-        public SuccessDataResult():base(default,true)
+        public SuccessDataResult() :base(default,true)
         {
                 
         }
