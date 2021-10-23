@@ -14,48 +14,106 @@ namespace Business.Concrete
     public class BasketManager : IBasketService
     {
         IBasketDal _basketDal;
-      
+        IBasketDetailService _basketDetailService;
 
-       public BasketManager(IBasketDal basketDal)
+        public BasketManager(IBasketDal basketDal, IBasketDetailService basketDetailService)
         {
             _basketDal = basketDal;
-            
+            _basketDetailService = basketDetailService;
         }
 
-        public IResult Add(Basket basket)
+        public IResult Add(int userId, int productId, int quantity)
         {
-            
-            //Sepete'e ürün ekle.
-            _basketDal.Add(basket);
-           
-            return new SuccessResult("sepete eklendi");
-        }
+            var cart = GetCartByUserId(userId);
 
-        public IResult Delete(Basket basket)
-        {
-            _basketDal.Delete(basket);
-            return new SuccessResult("Ürün Sepetten silindi");
-        }
-
-        public IDataResult<List<BasketDetailDto>> GetBasketDetailByUserId(int userId)
-        {
-
-
-            var result = _basketDal.GetBasketDetails(r => r.UserId == userId).ToList();
-
-            if (result == null)
+            if (cart.Data == null)
             {
-                return new ErrorDataResult<List<BasketDetailDto>>("Sepette Ürün Yok");
+                var basket = new Basket()
+                {
+                    UserId = userId
+                };
+                _basketDal.Add(basket);
+
+
+
+                var basketDetail = new BasketDetail()
+                {
+                    ProductId = productId,
+                    Quantity = quantity,
+                    BasketId = basket.BasketId,
+                    Status = true,
+                };
+
+                _basketDetailService.Add(basketDetail);
+
             }
-            return new SuccessDataResult<List<BasketDetailDto>>(result);
-          
+            else
+            {
+                //eklenmek isteyen ürün sepette var mı?(güncelleme)
+                //eklenmek isteyen ürün sepette var adet artır
+
+                var result = _basketDetailService.GetCartById(cart.Data.BasketId);
+
+                int index = result.Data.FindIndex(a => a.ProductId == productId);
+                if (index < 0)
+                {
+                   
+                  var basketDetail= new BasketDetail()
+                    {
+                        ProductId = productId,
+                        Quantity = quantity,
+                        BasketId  = cart.Data.BasketId,
+                        Status = true,
+                  };
+
+                   _basketDetailService.Add(basketDetail);
+                }
+                else
+                {
+                    result.Data[index].Quantity = result.Data[index].Quantity+1;
+                    _basketDetailService.Update(result.Data[index]);
+
+                }
+
+
+
+            }
            
+                return new SuccessResult();
+            
         }
+       
 
-        public IDataResult<List<Basket>>GetById(int userId)
+     
+
+            public IDataResult<Basket> GetCartByUserId(int userId)
+            {
+
+                return new SuccessDataResult<Basket>(_basketDal.Get(c => c.UserId == userId));
+            }
+
+            /*
+            public double SumBasketUnitPrice(int userId)
+            {
+                var result = _basketDal.GetBasketDetails(r => r.UserId == userId).Sum(x => x.UnitPrice);
+                return result;
+            }
+            */
+
+
+
+     
+       
+
+        public IResult Update(Basket basket)
         {
-            return new SuccessDataResult<List<Basket>>(_basketDal.GetAll(c => c.UserId == userId));
+            _basketDal.Update(basket);
+            return new SuccessResult();
         }
 
+      
+
+        
+    
     }
 }

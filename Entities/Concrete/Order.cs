@@ -9,7 +9,8 @@ namespace Entities.Concrete
     {
         public int OrderId { get; set; }
         public int UserId { get; set; }
-        public int  ProductId { get; set; }
+      
+        public DateTime OrderDate { get; set; }
         public int ShipperId { get; set; }
         public string RecipientName  { get; set; }
         public string RecipientAddress { get; set; }

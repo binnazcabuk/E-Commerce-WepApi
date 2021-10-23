@@ -22,10 +22,9 @@ namespace Business.Abstract
         IDataResult<List<Order>> GetByUserId(int userId);
        
 
-        IDataResult<List<Order>> GetAll();
+        IDataResult<List<Order>>GetAll();
 
-        IDataResult<List<OrderDetailDto>> GetOrderDetails();
-        IDataResult<List<OrderDetailDto>> GetOrderUserDetails(int userId);
+      
     }
 }
 

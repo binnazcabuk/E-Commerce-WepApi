@@ -19,8 +19,13 @@ namespace ConsoleUI
 
         private static void CategoryTest()
         {
-            
 
+           
+            //BasketManager basketManager = new BasketManager(new EfBasketDal(),new BasketDetailManager(new EfBasketDetailDal()));
+           // var result = basketManager.Add(1,2,1);
+         
+            Console.WriteLine("eklendi");
+           
         }
 
         private static void ProductTest()

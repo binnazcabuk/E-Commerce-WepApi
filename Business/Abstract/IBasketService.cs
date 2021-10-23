@@ -12,11 +12,16 @@ namespace Business.Abstract
     {
       
       
-        IResult Add(Basket basket);
-        IResult Delete(Basket basket);
-        IDataResult<List<Basket>> GetById(int userId);
-        IDataResult<List<BasketDetailDto>> GetBasketDetailByUserId(int userId);
+        IResult Add(int userId, int productId, int quantity);
+       
+        IResult Update(Basket basket);
+       
+
+        IDataResult<Basket> GetCartByUserId(int userId);
+
 
       
+     
+     
     }
 }

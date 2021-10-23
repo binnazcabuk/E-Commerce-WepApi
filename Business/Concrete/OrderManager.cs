@@ -13,23 +13,42 @@ namespace Business.Concrete
 {
     public class OrderManager : IOrderService
     {
-      
+        IBasketDetailService _basketDetailServiceDal;
         IOrderDal _orderDal;
-   
+        IOrderDetailService _orderDetailService;
 
-        public OrderManager(IOrderDal orderDal)
+        public OrderManager(IOrderDal orderDal,IBasketDetailService basketDetailService, IOrderDetailService orderDetailService)
         {
             _orderDal = orderDal;
-     
-          
+            _basketDetailServiceDal = basketDetailService;
+            _orderDetailService = orderDetailService;
         }
 
       
         public IResult Add(Order order)
         {
+            _orderDal.Add(order);
+           
+            var basketDetail = _basketDetailServiceDal.GetAllBasket(order.UserId);
 
-             _orderDal.Add(order);
+            foreach (var item in basketDetail.Data)
+            {
+                var orderDetail = new OrderDetail()
+                {
+                    OrderId = order.OrderId,
+                    Price=item.UnitPrice,
+                    ProductId=item.ProductId,
+                    Quantity=item.Quantity
+                    
+                    
+                };
 
+            
+                _orderDetailService.Add(orderDetail);
+
+            }
+                
+            
             return new SuccessResult();
         }
 
@@ -56,10 +75,7 @@ namespace Business.Concrete
         }
 
 
-        public IDataResult<List<OrderDetailDto>> GetOrderDetails()
-        {
-            return new SuccessDataResult<List<OrderDetailDto>>(_orderDal.GetOrderDetails());
-        }
+     
 
 
         public IDataResult <List<Order>> GetByUserId(int userId)
@@ -67,9 +83,6 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Order>>(_orderDal.GetAll(x=>x.UserId==userId));
         }
 
-        public IDataResult<List<OrderDetailDto>> GetOrderUserDetails(int userId)
-        {
-            return new SuccessDataResult<List<OrderDetailDto>>(_orderDal.GetOrderDetails(x=>x.UserId==userId));
-        }
+      
     }
 }

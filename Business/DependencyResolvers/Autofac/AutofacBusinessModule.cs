@@ -32,11 +32,19 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<UserManager>().As<IUserService>();
             builder.RegisterType<EfUserDal>().As<IUserDal>();
 
-            builder.RegisterType<OrderManager>().As<IOrderService>();
-            builder.RegisterType<EfOrderDal>().As<IOrderDal>();
+            builder.RegisterType<OrderManager>().As<IOrderService>().SingleInstance(); 
+            builder.RegisterType<EfOrderDal>().As<IOrderDal>().SingleInstance();
 
-            builder.RegisterType<BasketManager>().As<IBasketService>();
-            builder.RegisterType<EfBasketDal>().As<IBasketDal>();
+
+            builder.RegisterType<OrderDetailManager>().As<IOrderDetailService>().SingleInstance();
+            builder.RegisterType<EfOrderDetailDal>().As<IOrderDetailDal>().SingleInstance();
+
+            builder.RegisterType<BasketManager>().As<IBasketService>().SingleInstance();
+            builder.RegisterType<EfBasketDal>().As<IBasketDal>().SingleInstance();
+
+            builder.RegisterType<BasketDetailManager>().As<IBasketDetailService>().SingleInstance();
+            builder.RegisterType<EfBasketDetailDal>().As<IBasketDetailDal>().SingleInstance();
+
 
             builder.RegisterType<AuthManager>().As<IAuthService>();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>();
