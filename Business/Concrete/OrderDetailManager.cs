@@ -16,12 +16,10 @@ namespace Business.Concrete
         {
             _orderDetailDal = orderDetailDal;
         }
-
         public IResult Add(OrderDetail orderDetail)
         {
             _orderDetailDal.Add(orderDetail);
-            return new SuccessResult();
-            
+            return new SuccessResult()        
         }
     }
 }
