@@ -10,6 +10,5 @@ namespace Business.Abstract
     {
         IResult Add(OrderDetail orderDetail);
 
-       
     }
 }
