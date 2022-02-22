@@ -40,26 +40,16 @@ namespace Business.Concrete
         [CacheRemoveAspect("IProductService.Get")]
         public IResult Add(Product product)
         {
-            
-
             IResult result = BusinessRules.Run(CheckIfProducNameExists(product.ProductName));
 
             if (result != null)//eğer hata oluşmussa null dönmediyse
             {
                 return result; //
             }
-
-       
-          
             _productDal.Add(product);
             return new SuccessResult(Messages.ProductAdded);
-
-
-
         }
         
-
-
         public IDataResult<List<Product>> GetAll()
         {
            
@@ -69,9 +59,6 @@ namespace Business.Concrete
             }
 
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductListed);
-
-
-
         }
 
         public IDataResult<List<Product>> GetAllByCategoryId(int categoryId)
