@@ -34,8 +34,6 @@ namespace Business.Concrete
                 };
                 _basketDal.Add(basket);
 
-
-
                 var basketDetail = new BasketDetail()
                 {
                     ProductId = productId,
@@ -43,7 +41,6 @@ namespace Business.Concrete
                     BasketId = basket.BasketId,
                     Status = true,
                 };
-
                 _basketDetailService.Add(basketDetail);
 
             }
@@ -51,7 +48,6 @@ namespace Business.Concrete
             {
                 //eklenmek isteyen ürün sepette var mı?(güncelleme)
                 //eklenmek isteyen ürün sepette var adet artır
-
                 var result = _basketDetailService.GetCartById(cart.Data.BasketId);
 
                 int index = result.Data.FindIndex(a => a.ProductId == productId);
@@ -72,20 +68,10 @@ namespace Business.Concrete
                 {
                     result.Data[index].Quantity = result.Data[index].Quantity+1;
                     _basketDetailService.Update(result.Data[index]);
-
                 }
-
-
-
-            }
-           
-                return new SuccessResult();
-            
+            }        
+               return new SuccessResult();         
         }
-       
-
-     
-
             public IDataResult<Basket> GetCartByUserId(int userId)
             {
 
@@ -100,20 +86,10 @@ namespace Business.Concrete
             }
             */
 
-
-
-     
-       
-
         public IResult Update(Basket basket)
         {
             _basketDal.Update(basket);
             return new SuccessResult();
         }
-
-      
-
-        
-    
     }
 }
