@@ -11,17 +11,11 @@ namespace Business.Abstract
     public interface IBasketService
     {
       
-      
         IResult Add(int userId, int productId, int quantity);
        
         IResult Update(Basket basket);
-       
 
         IDataResult<Basket> GetCartByUserId(int userId);
-
-
-      
-     
      
     }
 }
