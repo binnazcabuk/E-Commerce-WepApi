@@ -23,7 +23,6 @@ namespace Business.Concrete
             _basketDetailServiceDal = basketDetailService;
             _orderDetailService = orderDetailService;
         }
-
       
         public IResult Add(Order order)
         {
@@ -38,51 +37,35 @@ namespace Business.Concrete
                     OrderId = order.OrderId,
                     Price=item.UnitPrice,
                     ProductId=item.ProductId,
-                    Quantity=item.Quantity
-                    
-                    
+                    Quantity=item.Quantity   
                 };
+         _orderDetailService.Add(orderDetail);
 
-            
-                _orderDetailService.Add(orderDetail);
-
-            }
-                
-            
+            }      
             return new SuccessResult();
         }
 
-       
         public IResult Update(Order order)
         {
             _orderDal.Update(order);
             return new SuccessResult();
         }
 
- 
-     
         public IResult Delete(Order order)
         {
             _orderDal.Delete(order);
             return new SuccessResult();
         }
-
-
   
         public IDataResult<List<Order>> GetAll()
         {
             return new SuccessDataResult<List<Order>>(_orderDal.GetAll());
         }
 
-
-     
-
-
         public IDataResult <List<Order>> GetByUserId(int userId)
         {  
             return new SuccessDataResult<List<Order>>(_orderDal.GetAll(x=>x.UserId==userId));
         }
 
-      
     }
 }
