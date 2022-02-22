@@ -27,34 +27,24 @@ namespace Business.Concrete
 
         public IResult Delete(BasketDetail basketDetail)
         {
-
             _basketDetailDal.Delete(basketDetail);
             return new SuccessResult("Ürün Sepetten silindi");
-
         }
 
         public IDataResult<List<BasketDetail>> GetAll(int userId)
         {
             var cart = _basketService.Get(c => c.UserId == userId);
-
-
             return new SuccessDataResult<List<BasketDetail>>(_basketDetailDal.GetAll(x => x.BasketId == cart.BasketId));
         }
 
         public IDataResult<List<BasketDetailDto>> GetAllBasket(int userId)
         {
             var cart = _basketService.Get(c => c.UserId == userId);
-
-
             return new SuccessDataResult<List<BasketDetailDto>>(_basketDetailDal.GetBasketDetails(x => x.BasketId == cart.BasketId && x.Status == true));
         }
 
-
-
         public IDataResult<List<BasketDetail>> GetCartById(int basketId)
-
         {
-
             var result = _basketDetailDal.GetAll(x => x.BasketId == basketId);
             return new SuccessDataResult<List<BasketDetail>>(result);
         }
